@@ -256,6 +256,8 @@ a{color:inherit;text-decoration:none}.hidden{display:none!important}
 .bk-item .k{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--royal);background:#F2ECFF;border-radius:8px;padding:2px 8px}
 .bk-item a{color:var(--ink);font-weight:600;font-size:14px;text-decoration:none}
 .bk-item .del{background:none;border:none;color:#B91C1C;cursor:pointer;font-size:18px}
+.homeTrips{background:#fff;border:2px solid var(--royal);color:var(--royal);border-radius:30px;padding:10px 20px;font-weight:700;font-size:14px;cursor:pointer;box-shadow:0 10px 24px -16px rgba(76,29,149,.5)}
+.homeTrips:hover{background:var(--royal);color:#fff}
 </style>
 
 <div id="intro"><div class="intro-inner">
@@ -285,7 +287,7 @@ a{color:inherit;text-decoration:none}.hidden{display:none!important}
 
 <div class="nav"><div class="nav-in">
   <div class="brand"><svg width="26" height="26" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="bdgn" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8B5CF6"/><stop offset="1" stop-color="#5B21B6"/></linearGradient><clipPath id="bdcn"><circle cx="50" cy="52" r="33"/></clipPath></defs><circle cx="50" cy="52" r="33" fill="url(#bdgn)"/><g clip-path="url(#bdcn)" fill="none" stroke="#fff" stroke-opacity=".5" stroke-width="1.6"><ellipse cx="50" cy="52" rx="33" ry="11"/><ellipse cx="50" cy="52" rx="12" ry="33"/><line x1="17" y1="52" x2="83" y2="52"/></g><ellipse cx="50" cy="52" rx="46" ry="16" transform="rotate(-24 50 52)" fill="none" stroke="#7C3AED" stroke-width="2.4" stroke-dasharray="2 6" stroke-linecap="round"/><g transform="translate(86,30) rotate(-150) scale(.85)"><path d="M12 0 L-9 -5 L-14 -5 L-7 0 L-14 5 L-9 5 Z" fill="#6D28D9"/><path d="M-3 0 L-9 -10 L-3 -10 L4 -2 Z" fill="#6D28D9"/><path d="M-3 0 L-9 10 L-3 10 L4 2 Z" fill="#6D28D9"/></g><path d="M40 28 C45 28 49 32 49 37 C49 44 40 52 40 52 C40 52 31 44 31 37 C31 32 35 28 40 28 Z" fill="#fff"/><circle cx="40" cy="37" r="3" fill="#6D28D9"/></svg><b>before<span class="l">Depart</span></b></div>
-  <div class="nav-r"><span class="pill">USD</span><span class="hideS navlink" id="acctBtn">Sign in</span><span class="hideS navlink" id="howLink">How it works</span></div>
+  <div class="nav-r"><span class="pill">USD</span><span class="hideS navlink" id="navTrips" style="display:none">Saved trips</span><span class="hideS navlink" id="acctBtn">Sign in</span><span class="hideS navlink" id="howLink">How it works</span></div>
 </div></div>
 
 <div id="setup">
@@ -309,6 +311,7 @@ a{color:inherit;text-decoration:none}.hidden{display:none!important}
   </div>
   <div class="sb-row"><div class="modetog" id="modetog"><button type="button" class="mt on" data-mode="flight">Flight</button><button type="button" class="mt" data-mode="car">Car / road trip</button></div><div class="sb-dests" id="sbDests"></div></div>
   </div>
+  <div class="wrap" style="margin-top:14px"><button id="homeTrips" class="homeTrips" style="display:none">★ Your saved trips</button></div>
 
   <div class="wrap">
     <div class="section reveal">
@@ -798,7 +801,7 @@ window.renderSbDests();
   function fixUrl(u){u=(u||"").trim(); if(u && !/^https?:\/\//i.test(u))u="https://"+u; return u;}
   function notConnected(){ show("authModal"); msg("authMsg","Accounts are not connected yet — paste your Supabase anon key in the app, then push again.",false); }
 
-  function refreshNav(){var b=$("acctBtn"); if(!b)return; b.textContent = BD.user ? (BD.user.email.split("@")[0]+" \u25be") : "Sign in";}
+  function refreshNav(){var b=$("acctBtn"); if(b)b.textContent = BD.user ? (BD.user.email.split("@")[0]+" \u25be") : "Sign in"; var nt=$("navTrips"); if(nt)nt.style.display=BD.user?"inline":"none"; var ht=$("homeTrips"); if(ht)ht.style.display=BD.user?"inline-block":"none";}
 
   /* ---- auth modal ---- */
   var authMode="signup";
@@ -812,6 +815,8 @@ window.renderSbDests();
   }
   var acct=$("acctBtn");
   if(acct)acct.onclick=function(){ if(!supa){notConnected();return;} if(BD.user){openTrips();}else{openAuth(true);} };
+  var _nt=$("navTrips"); if(_nt)_nt.onclick=function(){ if(BD.user)openTrips(); else openAuth(true); };
+  var _ht=$("homeTrips"); if(_ht)_ht.onclick=function(){ if(BD.user)openTrips(); else openAuth(true); };
   if($("authGo"))$("authGo").onclick=async function(){
     if(!supa){notConnected();return;}
     var email=$("authEmail").value.trim(), pass=$("authPass").value;
