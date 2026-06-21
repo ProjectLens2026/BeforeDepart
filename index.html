@@ -841,7 +841,7 @@ window.renderSbDests();
   if(stb)stb.onclick=function(){
     if(!supa){notConnected();return;}
     if(!BD.user){openAuth(true);return;}
-    if(!BD.pro){show("subModal");return;}
+    /* FREE-FOR-NOW: Pro gate disabled. To re-enable paid saving, restore: if(!BD.pro){show("subModal");return;} */
     if(!state.dests.length){alert("Build a trip first.");return;}
     $("saveName").value=suggestName(); $("saveMsg").className="bd-msg"; show("saveModal");
   };
