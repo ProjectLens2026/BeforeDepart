@@ -342,7 +342,9 @@ a{color:inherit;text-decoration:none}.hidden{display:none!important}
 .adv{padding:12px 14px;border-radius:12px;margin:6px 0 4px}
 .adv-l{font-weight:800;font-size:15px}
 .adv-n{font-size:13px;color:var(--ink);margin-top:4px;line-height:1.5}
-.adv-src{font-size:11px;color:var(--muted);margin-top:6px;text-transform:uppercase;letter-spacing:.04em}
+.adv-src{font-size:11px;color:var(--muted);margin-top:8px;text-transform:uppercase;letter-spacing:.04em}
+.adv-btn{margin-top:12px}
+.adv-btn .pillbtn{display:inline-block}
 .adv-dis{font-size:11px;color:var(--muted);margin:8px 0 0}
 </style>
 
@@ -980,14 +982,13 @@ function advBadge(base){
  var cn=(base&&base.country)||(base&&base.key&&EXTRA[base.key]?EXTRA[base.key].co:"")||"";
  if(!cn)return "";
  var a=ADVISORY[cn];
- var MAIN="https://travel.state.gov/content/travel/en/traveladvisories/traveladvisories.html";
- var url=(a&&a.slug)?("https://travel.state.gov/content/travel/en/traveladvisories/traveladvisories/"+a.slug+"-travel-advisory.html"):MAIN;
+ var url="https://www.google.com/search?q="+encodeURIComponent(cn+" travel advisory site:travel.state.gov");
  if(!a){
-  return `<div class="sec">Travel advisory</div><div class="adv" style="border-left:5px solid #6B5B92;background:#F4F0FF"><div class="adv-l" style="color:#4C1D95">U.S. State Department advisory</div><div class="adv-n">Check the current U.S. State Department travel advisory for ${cn} before you go.</div><a class="pillbtn" style="margin-top:8px" href="${url}" target="_blank" rel="noopener">Open the official advisory \u2192</a></div>`;
+  return `<div class="sec">Travel advisory</div><div class="adv" style="border-left:5px solid #6B5B92;background:#F4F0FF"><div class="adv-l" style="color:#4C1D95">U.S. State Department advisory</div><div class="adv-n">Check the current U.S. State Department travel advisory for ${cn} before you go.</div><div class="adv-btn"><a class="pillbtn" href="${url}" target="_blank" rel="noopener">Open the official advisory \u2192</a></div></div>`;
  }
  var COL={1:["#0E8A3E","#E7F6EC","Level 1 \u00b7 Exercise normal precautions"],2:["#B7791F","#FEF6E7","Level 2 \u00b7 Exercise increased caution"],3:["#C2410C","#FFF1E8","Level 3 \u00b7 Reconsider travel"],4:["#B00020","#FDECEC","Level 4 \u00b7 Do not travel"]};
  var k=COL[a.lvl]||COL[1];
- return `<div class="sec">Travel advisory</div><div class="adv" style="border-left:5px solid ${k[0]};background:${k[1]}"><div class="adv-l" style="color:${k[0]}">${k[2]}</div>${a.note?`<div class="adv-n">${a.note}</div>`:""}<div class="adv-src">U.S. State Department \u00b7 ${cn}</div><a class="pillbtn" style="margin-top:8px" href="${url}" target="_blank" rel="noopener">Read the official advisory \u2192</a><p class="adv-dis">Advisory levels can change \u2013 confirm at the official link before you travel.</p></div>`;
+ return `<div class="sec">Travel advisory</div><div class="adv" style="border-left:5px solid ${k[0]};background:${k[1]}"><div class="adv-l" style="color:${k[0]}">${k[2]}</div>${a.note?`<div class="adv-n">${a.note}</div>`:""}<div class="adv-src">U.S. State Department \u00b7 ${cn}</div><div class="adv-btn"><a class="pillbtn" href="${url}" target="_blank" rel="noopener">Read the official advisory \u2192</a></div><p class="adv-dis">Advisory levels can change \u2013 confirm at the official link before you travel.</p></div>`;
 }
 function renderEssentials(dests){const base=dests[0],c=coOf(base);let h=advBadge(base)+affBand(base,c)+`<div class="sec">Visa & entry</div><div class="ic"><div class="d">${c.entry.map(e=>'• '+e).join('<br>')}</div><div class="btns"><a class="pillbtn solid" href="https://apply.joinsherpa.com/" target="_blank" rel="noopener">Check requirements</a><a class="pillbtn" href="https://www.ivisa.com/" target="_blank" rel="noopener">Apply (iVisa)</a><a class="pillbtn" href="https://www.google.com/search?q=${encodeURIComponent('visa requirements '+base.name)}" target="_blank" rel="noopener">More</a></div></div>
  <div class="sec">Travel insurance</div><div class="ic"><div class="d">Don't fly without it — compare a couple for medical + trip-cancellation cover:</div><div class="btns"><a class="pillbtn solid" href="${aff('https://safetywing.com/','safetywing')}" target="_blank" rel="noopener">SafetyWing</a><a class="pillbtn" href="${aff('https://www.worldnomads.com/','worldnomads')}" target="_blank" rel="noopener">World Nomads</a><a class="pillbtn" href="https://www.allianztravelinsurance.com/" target="_blank" rel="noopener">Allianz</a><a class="pillbtn" href="https://www.axatravelinsurance.com/" target="_blank" rel="noopener">AXA</a></div></div>
