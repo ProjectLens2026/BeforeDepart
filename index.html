@@ -339,6 +339,11 @@ a{color:inherit;text-decoration:none}.hidden{display:none!important}
 .legal p{font-size:13.5px;line-height:1.6;color:var(--ink);margin-bottom:8px}
 .legal .sec{margin-top:14px;font-size:15px}
 #cruiseModal .bd-card,#campModal .bd-card{max-width:560px;max-height:90vh;overflow:auto}
+.adv{padding:12px 14px;border-radius:12px;margin:6px 0 4px}
+.adv-l{font-weight:800;font-size:15px}
+.adv-n{font-size:13px;color:var(--ink);margin-top:4px;line-height:1.5}
+.adv-src{font-size:11px;color:var(--muted);margin-top:6px;text-transform:uppercase;letter-spacing:.04em}
+.adv-dis{font-size:11px;color:var(--muted);margin:8px 0 0}
 </style>
 
 <div id="intro"><div class="intro-inner">
@@ -911,7 +916,80 @@ var CARCOL={enterprise:"#00843D",hertz:"#E8B100",avis:"#E4002B",budget:"#F58025"
 function carBrands(big){var cls=big?"carbrands big":"carbrands";var b="",i;for(i=0;i<CARS.length;i++){var col=CARCOL[CARS[i].p]||"#6D28D9";b+='<a class="carbrand" target="_blank" rel="noopener sponsored" href="'+aff(CARS[i].u,CARS[i].p)+'"><span class="bdot" style="background:'+col+'"></span>'+CARS[i].n+'</a>';}b+='<a class="carbrand cmp" target="_blank" rel="noopener sponsored" href="'+aff("https://www.discovercars.com/","discovercars")+'"><span class="bdot" style="background:'+CARCOL.discovercars+'"></span>Compare all \u00b7 DiscoverCars</a><a class="carbrand cmp" target="_blank" rel="noopener sponsored" href="'+aff("https://www.rentalcars.com/","rentalcars")+'"><span class="bdot" style="background:'+CARCOL.rentalcars+'"></span>Compare all \u00b7 Rentalcars</a>';return '<div class="'+cls+'">'+b+'</div>';}
 function carAround(d,c){var dlat=d.lat||(d.key?REGIONS[d.key].spots[0].lat:0),dlng=d.lng||(d.key?REGIONS[d.key].spots[0].lng:0);var oLat=state.fromLat,oLng=state.fromLng;var h="";if(oLat!=null&&oLng!=null){var km=haversineKm(oLat,oLng,dlat,dlng),hrs=km/85;var gdir="https://www.google.com/maps/dir/?api=1&origin="+oLat+","+oLng+"&destination="+dlat+","+dlng+"&travelmode=driving";var waze="https://waze.com/ul?ll="+dlat+","+dlng+"&navigate=yes";h+='<div class="sec">Driving there</div><div class="ic"><div class="t">'+(state.fromName||"Your start")+" \u2192 "+d.name+'</div><div class="d">About '+Math.round(km)+" km \u00b7 ~"+fmtHrs(hrs)+' driving non-stop. Add breaks for a realistic time.</div><div class="btns"><a class="pillbtn solid" href="'+gdir+'" target="_blank" rel="noopener">Google Maps directions</a><a class="pillbtn" href="'+waze+'" target="_blank" rel="noopener">Waze</a></div></div>';}else{h+='<div class="sec">Driving there</div><div class="ic"><div class="d">Set your start in \u201cDeparting from\u201d to see drive distance and time to '+d.name+'.</div></div>';}if(c&&c.emerg){h+='<div class="sec">On the road</div><div class="ic"><div class="d">Fuel up before long stretches, check toll routes, and keep emergency '+emergNum(d)+' saved.</div></div>';}if(d.key){var x=EXTRA[d.key];h+='<div class="sec">Getting around '+d.name+'</div><div class="ic"><div class="t">'+x.metro.name+'</div><div class="d">'+x.metro.note+'</div></div>';}if(c&&c.taxi){h+='<div class="sec">Taxi and rideshare</div><div class="ic"><div class="d">'+c.taxi.join(" \u00b7 ")+'</div></div>';}if(c&&c.car){h+='<div class="sec">Rent a car</div>'+carBrands(true)+'';}return h;}
 function renderAround(dests){const d=dests[0],c=coOf(d);let h="";if(state.mode==='car'){document.getElementById('tab-around').innerHTML=carAround(d,c);return;}if(d.key){const x=EXTRA[d.key],ap=x.airport,first=REGIONS[d.key].spots[0];const sky=aff(`https://www.skyscanner.com/transport/flights/${state.from}/${ap.code}/${ymd(state.depart)}/${ymd(state.ret)}/`,"skyscanner");const gf=`https://www.google.com/travel/flights?q=${encodeURIComponent('flights from '+state.from+' to '+ap.code+' '+state.depart+' to '+state.ret)}`;const transit=`https://www.google.com/maps/dir/?api=1&origin=${ap.lat},${ap.lng}&destination=${first.lat},${first.lng}&travelmode=transit`;h+=`<div class="sec">Landing airport</div><div class="ic"><div class="t">${ap.name} (${ap.code})</div><div class="d">Arrival point in ${d.name}.</div><div class="btns"><a class="pillbtn" href="${gmaps(ap.lat,ap.lng)}" target="_blank" rel="noopener">Maps</a><a class="pillbtn" href="${transit}" target="_blank" rel="noopener">Route to first stop</a></div></div><div class="sec">Find cheap flights · ${state.from} → ${ap.code}</div><div class="ic"><div class="d">For ${fmtDate(state.depart)}–${fmtDate(state.ret)}.</div><div class="btns"><a class="pillbtn solid" href="${gf}" target="_blank" rel="noopener">Google Flights</a><a class="pillbtn" href="${sky}" target="_blank" rel="noopener">Skyscanner</a><a class="pillbtn" href="https://www.cheapoair.com/" target="_blank" rel="noopener">CheapOair</a></div></div><div class="sec">Metro & transit</div><div class="ic"><div class="t">${x.metro.name}</div><div class="d">${x.metro.note}</div></div>`;}else{const gf=`https://www.google.com/travel/flights?q=${encodeURIComponent('flights from '+state.from+' to '+d.name+' '+state.depart+' to '+state.ret)}`;h+=`<div class="sec">Getting there</div><div class="ic"><div class="t">Fly into ${d.name}</div><div class="d">We pull live fares for your dates.</div><div class="btns"><a class="pillbtn solid" href="${gf}" target="_blank" rel="noopener">Google Flights</a><a class="pillbtn" href="https://www.skyscanner.com/" target="_blank" rel="noopener">Skyscanner</a><a class="pillbtn" href="https://www.cheapoair.com/" target="_blank" rel="noopener">CheapOair</a></div></div><div class="sec">Metro & transit</div><div class="ic"><div class="d">Check the local transit map and plan a route from your hotel.</div><div class="btns"><a class="pillbtn" href="${gq('metro map '+d.name)}" target="_blank" rel="noopener">Transit in ${d.name}</a></div></div>`;}h+=`<div class="sec">Taxi & rideshare</div><div class="ic"><div class="d">${c.taxi.map(t=>'• '+t).join('<br>')}</div></div><div class="sec">Rent a car</div>${carBrands(true)}`;document.getElementById('tab-around').innerHTML=h;}
-function renderEssentials(dests){const base=dests[0],c=coOf(base);let h=affBand(base,c)+`<div class="sec">Visa & entry</div><div class="ic"><div class="d">${c.entry.map(e=>'• '+e).join('<br>')}</div><div class="btns"><a class="pillbtn solid" href="https://apply.joinsherpa.com/" target="_blank" rel="noopener">Check requirements</a><a class="pillbtn" href="https://www.ivisa.com/" target="_blank" rel="noopener">Apply (iVisa)</a><a class="pillbtn" href="https://www.google.com/search?q=${encodeURIComponent('visa requirements '+base.name)}" target="_blank" rel="noopener">More</a></div></div>
+
+const ADVISORY={
+"Afghanistan":{lvl:4,slug:"afghanistan",note:"Terrorism, armed conflict and kidnapping; no U.S. embassy support."},
+"Iran":{lvl:4,slug:"iran",note:"Risk of arbitrary arrest and detention; no U.S. consular services; heightened regional tensions."},
+"Iraq":{lvl:4,slug:"iraq",note:"Terrorism, armed conflict and militia activity."},
+"Lebanon":{lvl:4,slug:"lebanon",note:"Crime, terrorism, civil unrest, kidnapping and the risk of armed conflict."},
+"Syria":{lvl:4,slug:"syria",note:"Armed conflict, terrorism and kidnapping."},
+"Yemen":{lvl:4,slug:"yemen",note:"Terrorism, armed conflict, kidnapping and landmines."},
+"Libya":{lvl:4,slug:"libya",note:"Crime, terrorism, civil unrest and armed conflict."},
+"Somalia":{lvl:4,slug:"somalia",note:"Crime, terrorism, kidnapping and piracy."},
+"Sudan":{lvl:4,slug:"sudan",note:"Armed conflict, civil unrest and terrorism."},
+"South Sudan":{lvl:4,slug:"south-sudan",note:"Crime, kidnapping and armed conflict."},
+"Mali":{lvl:4,slug:"mali",note:"Terrorism, crime and kidnapping."},
+"Burkina Faso":{lvl:4,slug:"burkina-faso",note:"Terrorism, kidnapping and armed attacks."},
+"North Korea":{lvl:4,note:"Serious risk of arrest and long-term detention. U.S. passports need special validation to travel there."},
+"Russia":{lvl:4,slug:"russia",note:"Risk of wrongful detention, terrorism and the war in Ukraine."},
+"Belarus":{lvl:4,slug:"belarus",note:"Arbitrary enforcement of laws, detention and regional spillover."},
+"Ukraine":{lvl:4,slug:"ukraine",note:"Active armed conflict from Russia's full-scale war."},
+"Venezuela":{lvl:4,slug:"venezuela",note:"Wrongful detention, crime, civil unrest and weak health services."},
+"Haiti":{lvl:4,slug:"haiti",note:"Kidnapping, gang violence and civil unrest."},
+"Myanmar":{lvl:4,note:"Civil unrest, armed conflict and arbitrary detention."},
+"Central African Republic":{lvl:4,note:"Crime, civil unrest and armed conflict."},
+"Democratic Republic of the Congo":{lvl:4,note:"Armed conflict, crime and civil unrest."},
+"Israel":{lvl:3,slug:"israel-west-bank-and-gaza",note:"Reconsider travel due to terrorism and regional conflict. Gaza is Level 4 \u2013 Do Not Travel."},
+"Saudi Arabia":{lvl:3,slug:"saudi-arabia",note:"Terrorism and the threat of missile or drone attacks, especially near the Yemen border."},
+"Egypt":{lvl:3,slug:"egypt",note:"Reconsider travel due to terrorism; the Sinai Peninsula is higher risk."},
+"Pakistan":{lvl:3,slug:"pakistan",note:"Terrorism and the potential for armed conflict in some areas."},
+"Nigeria":{lvl:3,slug:"nigeria",note:"Crime, terrorism, kidnapping and unrest in parts of the country."},
+"Colombia":{lvl:3,slug:"colombia",note:"Crime, terrorism and kidnapping in some areas."},
+"Honduras":{lvl:3,slug:"honduras",note:"Crime; some areas are higher risk."},
+"United Arab Emirates":{lvl:2,slug:"united-arab-emirates",note:"Increased caution due to the regional threat of missile or drone attacks and terrorism."},
+"Turkey":{lvl:2,slug:"turkey",note:"Terrorism; areas near the Syria border are Level 4 \u2013 Do Not Travel."},
+"India":{lvl:2,slug:"india",note:"Crime and terrorism; some regions are higher risk."},
+"Indonesia":{lvl:2,slug:"indonesia",note:"Terrorism and natural disasters."},
+"Mexico":{lvl:2,slug:"mexico",note:"Crime and kidnapping; risk varies a lot by state."},
+"Morocco":{lvl:2,slug:"morocco",note:"Terrorism."},
+"Jordan":{lvl:2,slug:"jordan",note:"Terrorism; some border areas are higher risk."},
+"France":{lvl:2,slug:"france",note:"Terrorism and civil unrest."},
+"United Kingdom":{lvl:2,slug:"united-kingdom",note:"Terrorism."},
+"Spain":{lvl:2,slug:"spain",note:"Terrorism and civil unrest."},
+"Italy":{lvl:2,slug:"italy",note:"Terrorism."},
+"Germany":{lvl:2,slug:"germany",note:"Terrorism."},
+"Belgium":{lvl:2,slug:"belgium",note:"Terrorism."},
+"Netherlands":{lvl:2,slug:"netherlands",note:"Terrorism."},
+"South Africa":{lvl:2,slug:"south-africa",note:"Crime and civil unrest."},
+"Brazil":{lvl:2,slug:"brazil",note:"Crime; some areas are higher risk."},
+"China":{lvl:2,slug:"china",note:"Arbitrary enforcement of local laws and exit bans."},
+"Kenya":{lvl:2,slug:"kenya",note:"Crime, terrorism and kidnapping in some areas."},
+"Philippines":{lvl:2,slug:"philippines",note:"Crime, terrorism and kidnapping in some areas."},
+"Thailand":{lvl:1,slug:"thailand",note:"Normal precautions; the far-southern provinces are higher risk."},
+"Japan":{lvl:1,slug:"japan"},
+"Switzerland":{lvl:1,slug:"switzerland"},
+"Canada":{lvl:1,slug:"canada"},
+"Qatar":{lvl:1,slug:"qatar"},
+"Singapore":{lvl:1,slug:"singapore"},
+"South Korea":{lvl:1,slug:"south-korea"},
+"Australia":{lvl:1,slug:"australia"},
+"New Zealand":{lvl:1,slug:"new-zealand"},
+"United States":{lvl:1}
+};
+function advBadge(base){
+ var cn=(base&&base.country)||(base&&base.key&&EXTRA[base.key]?EXTRA[base.key].co:"")||"";
+ if(!cn)return "";
+ var a=ADVISORY[cn];
+ var MAIN="https://travel.state.gov/content/travel/en/traveladvisories/traveladvisories.html";
+ var url=(a&&a.slug)?("https://travel.state.gov/content/travel/en/traveladvisories/traveladvisories/"+a.slug+"-travel-advisory.html"):MAIN;
+ if(!a){
+  return `<div class="sec">Travel advisory</div><div class="adv" style="border-left:5px solid #6B5B92;background:#F4F0FF"><div class="adv-l" style="color:#4C1D95">U.S. State Department advisory</div><div class="adv-n">Check the current U.S. State Department travel advisory for ${cn} before you go.</div><a class="pillbtn" style="margin-top:8px" href="${url}" target="_blank" rel="noopener">Open the official advisory \u2192</a></div>`;
+ }
+ var COL={1:["#0E8A3E","#E7F6EC","Level 1 \u00b7 Exercise normal precautions"],2:["#B7791F","#FEF6E7","Level 2 \u00b7 Exercise increased caution"],3:["#C2410C","#FFF1E8","Level 3 \u00b7 Reconsider travel"],4:["#B00020","#FDECEC","Level 4 \u00b7 Do not travel"]};
+ var k=COL[a.lvl]||COL[1];
+ return `<div class="sec">Travel advisory</div><div class="adv" style="border-left:5px solid ${k[0]};background:${k[1]}"><div class="adv-l" style="color:${k[0]}">${k[2]}</div>${a.note?`<div class="adv-n">${a.note}</div>`:""}<div class="adv-src">U.S. State Department \u00b7 ${cn}</div><a class="pillbtn" style="margin-top:8px" href="${url}" target="_blank" rel="noopener">Read the official advisory \u2192</a><p class="adv-dis">Advisory levels can change \u2013 confirm at the official link before you travel.</p></div>`;
+}
+function renderEssentials(dests){const base=dests[0],c=coOf(base);let h=advBadge(base)+affBand(base,c)+`<div class="sec">Visa & entry</div><div class="ic"><div class="d">${c.entry.map(e=>'• '+e).join('<br>')}</div><div class="btns"><a class="pillbtn solid" href="https://apply.joinsherpa.com/" target="_blank" rel="noopener">Check requirements</a><a class="pillbtn" href="https://www.ivisa.com/" target="_blank" rel="noopener">Apply (iVisa)</a><a class="pillbtn" href="https://www.google.com/search?q=${encodeURIComponent('visa requirements '+base.name)}" target="_blank" rel="noopener">More</a></div></div>
  <div class="sec">Travel insurance</div><div class="ic"><div class="d">Don't fly without it — compare a couple for medical + trip-cancellation cover:</div><div class="btns"><a class="pillbtn solid" href="${aff('https://safetywing.com/','safetywing')}" target="_blank" rel="noopener">SafetyWing</a><a class="pillbtn" href="${aff('https://www.worldnomads.com/','worldnomads')}" target="_blank" rel="noopener">World Nomads</a><a class="pillbtn" href="https://www.allianztravelinsurance.com/" target="_blank" rel="noopener">Allianz</a><a class="pillbtn" href="https://www.axatravelinsurance.com/" target="_blank" rel="noopener">AXA</a></div></div>
  <div class="sec">eSIM & data</div><div class="ic"><div class="d">Install an eSIM before you land — Airalo is simplest; Holafly & Nomad are alternatives.</div><div class="btns"><a class="pillbtn solid" href="${aff(c.esim,'airalo')}" target="_blank" rel="noopener">Get an eSIM</a></div></div>
  <div class="sec">Money & exchange</div><div class="ic"><div class="t">${c.cur}</div><div class="d">${c.money}</div>`;
