@@ -355,6 +355,32 @@ a{color:inherit;text-decoration:none}.hidden{display:none!important}
 .adv-btn{margin-top:12px}
 .adv-btn .pillbtn{display:inline-block}
 .adv-dis{font-size:11px;color:var(--muted);margin:8px 0 0}
+
+.gd-wrap{padding:16px 14px 10px}
+.gd-h{font-size:22px;color:var(--ink);text-align:center;margin:6px 0 2px}
+.gd-intro{color:var(--muted);max-width:640px;margin:0 auto 18px;text-align:center;font-size:14px;line-height:1.55}
+.gd-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}
+.gd-card{background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden;cursor:pointer;transition:transform .15s,box-shadow .15s}
+.gd-card:hover{transform:translateY(-3px);box-shadow:0 14px 32px rgba(109,40,217,.16)}
+.gd-card img{width:100%;height:150px;object-fit:cover;display:block;background:#ece5fb}
+.gd-card .b{padding:13px 15px}
+.gd-card .ttl{font-weight:800;color:var(--ink);font-size:16px;line-height:1.25}
+.gd-card .te{color:var(--muted);font-size:13px;margin-top:6px;line-height:1.45}
+.gd-card .meta{color:var(--royal);font-weight:700;font-size:12px;margin-top:10px}
+.article{max-width:720px;margin:0 auto;padding:4px 6px 24px}
+.article .ahero{width:100%;height:230px;object-fit:cover;border-radius:16px;background:#ece5fb;margin-bottom:6px}
+.article h1{font-size:clamp(23px,5vw,32px);color:var(--ink);margin:12px 0 2px;line-height:1.15}
+.article .ameta{color:var(--muted);font-size:13px;margin-bottom:10px}
+.article h2{color:var(--royal-d);font-size:19px;margin:22px 0 8px}
+.article p{color:#3a2b63;line-height:1.72;margin:0 0 12px;font-size:15px}
+.article ul{margin:0 0 12px 20px;color:#3a2b63;line-height:1.72;font-size:15px}
+.article li{margin-bottom:4px}
+.gback{display:inline-flex;gap:6px;align-items:center;background:#efe9fc;color:var(--royal-d);border:none;border-radius:10px;padding:9px 14px;font-weight:700;cursor:pointer;margin-bottom:6px;font-size:14px}
+.byg{margin-top:26px;background:linear-gradient(180deg,#f3eeff,#eadffb);border:1px solid var(--line);border-radius:18px;padding:18px}
+.byg h2{margin-top:0}
+.byg p{margin-bottom:6px;color:#3a2b63;line-height:1.6}
+.byg .bb{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
+.linklike{background:none;border:none;color:var(--royal);font-weight:800;cursor:pointer;padding:0;text-decoration:underline;font-size:15px}
 </style>
 
 <div id="intro"><div class="intro-inner">
@@ -388,7 +414,7 @@ a{color:inherit;text-decoration:none}.hidden{display:none!important}
 </div></div>
 
 <div id="setup">
-  <div class="toptabs"><button class="ttab on" data-tab="destinations" onclick="setTopTab('destinations')">Destinations</button><button class="ttab" data-tab="camping" onclick="setTopTab('camping')">Camping</button><button class="ttab" data-tab="cruises" onclick="setTopTab('cruises')">Cruises</button></div>
+  <div class="toptabs"><button class="ttab on" data-tab="destinations" onclick="setTopTab('destinations')">Destinations</button><button class="ttab" data-tab="camping" onclick="setTopTab('camping')">Camping</button><button class="ttab" data-tab="cruises" onclick="setTopTab('cruises')">Cruises</button><button class="ttab" data-tab="guides" onclick="setTopTab('guides')">Guides</button></div>
   <div id="panelDestinations">
   <div class="hero">
     <div class="dots"></div>
@@ -459,6 +485,7 @@ a{color:inherit;text-decoration:none}.hidden{display:none!important}
   </div></div>
   <div id="panelCamping" style="display:none"><div class="section" id="campSection"></div></div>
   <div id="panelCruises" style="display:none"></div>
+  <div id="panelGuides" style="display:none"></div>
   <div class="sitefoot">
     <div class="sf-cols">
       <div class="sf-col"><b>BeforeDepart</b><p>Know everything before you depart. Destination intelligence for any place on Earth — safety, transport, stays, food, customs, emergencies and the essentials, all in one place.</p></div>
@@ -727,7 +754,94 @@ var CRUISE_LINES=[
 {n:"Virgin Voyages",kw:"Virgin Voyages cruise ship",u:"https://www.virginvoyages.com/",p:"virginvoyages",blurb:"Stylish, adults-only, tips included.",vibe:"Adults-only, trendy",price:"$$$",ships:"Mid",sails:"Caribbean and Mediterranean.",known:"Stylish, adults-only ships with tips, Wi-Fi and many eateries included."}
 ];
 function openCruise(type,i){var c=(type==="region"?CRUISE_REGIONS:CRUISE_LINES)[i];if(!c)return;var li=function(x){return "<li>"+x+"</li>";};var html='<div class="cdetimg"><img class="ph" data-kw="'+encodeURIComponent(c.kw)+'" data-emb="city" alt=""></div>';if(type==="region"){html+='<h3 style="margin-bottom:2px">'+c.n+' Cruise</h3><p class="sub">What to expect</p><p class="cblurb">'+c.expect+'</p><div class="cfacts"><div><b>'+c.len+'</b><span>typical length</span></div><div><b>'+c.cost+'</b><span>per person</span></div><div><b>'+c.season+'</b><span>best season</span></div></div><div class="sec">Popular ports &amp; shore tours</div><ul class="camul">'+c.ports.map(li).join("")+'</ul><div class="sec">Usually included in the fare</div><ul class="camul">'+CINCL.map(li).join("")+'</ul><div class="sec">Usually costs extra</div><ul class="camul">'+CEXTRA.map(li).join("")+'</ul><div class="cbtns"><a class="cbtn solid" target="_blank" rel="noopener sponsored" href="'+aff("https://www.cruisedirect.com/","cruisedirect")+'">Find '+c.n+' cruises</a><a class="cbtn" target="_blank" rel="noopener sponsored" href="'+aff("https://www.expedia.com/Cruises","expediacruises")+'">Compare deals</a></div>';}else{html+='<h3 style="margin-bottom:2px">'+c.n+'</h3><p class="sub">'+c.vibe+' \u00b7 '+c.price+'</p><p class="cblurb">'+c.known+'</p><div class="cfacts"><div><b>'+c.price+'</b><span>price level</span></div><div><b>'+c.ships+'</b><span>ship size</span></div></div><div class="sec">Where they sail</div><p class="cblurb">'+c.sails+'</p><div class="sec">Usually included in the fare</div><ul class="camul">'+CINCL.map(li).join("")+'</ul><div class="cbtns"><a class="cbtn solid" target="_blank" rel="noopener sponsored" href="'+aff(c.u,c.p)+'">Explore '+c.n+'</a><a class="cbtn" target="_blank" rel="noopener sponsored" href="'+aff("https://www.cruisedirect.com/","cruisedirect")+'">Find '+c.n+' deals</a></div>';}html+='<p class="cvary">Cruise prices and what is included vary by ship, season and cabin \u2014 always confirm on the booking site.</p>';document.getElementById("cruiseBody").innerHTML=html;bdShow("cruiseModal");hydratePhotos();}
-function setTopTab(n){var ids={destinations:"panelDestinations",camping:"panelCamping",cruises:"panelCruises"},k;for(k in ids){var el=document.getElementById(ids[k]);if(el)el.style.display=(k===n?"":"none");}var ts=document.querySelectorAll(".ttab"),i;for(i=0;i<ts.length;i++){ts[i].classList.toggle("on",ts[i].getAttribute("data-tab")===n);}try{if(n==="camping")renderCamps();}catch(e){var _c=document.getElementById("campSection");if(_c)_c.innerHTML='<div style="padding:24px;color:#b00020;font-weight:700;font-size:14px">Camping error: '+(e&&e.message)+'</div>';}try{if(n==="cruises")renderCruises();}catch(e){var _r=document.getElementById("panelCruises");if(_r)_r.innerHTML='<div style="padding:24px;color:#b00020;font-weight:700;font-size:14px">Cruises error: '+(e&&e.message)+'</div>';}try{window.scrollTo({top:0,behavior:"smooth"});}catch(e){}}
+/*BD-GUIDES*/
+var GUIDES=[
+{slug:"paris",title:"Paris: What to Know Before You Go",city:"Paris",country:"France",emoji:"\uD83C\uDDEB\uD83C\uDDF7",kw:"paris eiffel tower skyline",read:6,
+teaser:"Skip the rookie mistakes \u2014 when to go, how to get around, where to base yourself, and what to know before you land.",
+body:`<h2>The Paris most first-timers get wrong</h2><p>Paris rewards travelers who slow down. The classic mistake is cramming the Eiffel Tower, the Louvre, Versailles and Montmartre into two rushed days. Pick a few neighborhoods, walk them properly, and let the city happen between the landmarks \u2014 a corner bakery, a quiet square, a bench by the river. That is the Paris people fall in love with.</p>
+<h2>Best time to visit</h2><p>Late spring (April\u2013June) and early autumn (September\u2013October) are the sweet spots: mild weather, long light, and gardens at their best without peak-summer crowds. July and August are warm but busy, and many small local restaurants close while Parisians take their own holidays. Winter is cold and grey but cheaper, with festive markets in December.</p>
+<h2>Getting around</h2><p>The M\u00e9tro is the fastest way across the city and runs until around 1am (later on weekends). Use contactless on your phone or a rechargeable Navigo Easy card. Central Paris is also wonderfully walkable \u2014 many "far" sights are a 20-minute stroll apart along the Seine. Skip renting a car; parking and traffic are a headache you do not need.</p>
+<h2>Where to base yourself</h2><p>For a first trip, stay central. Le Marais (3rd/4th) is lively, historic and full of caf\u00e9s. Saint-Germain (6th) is elegant and classic. The 7th puts you near the Eiffel Tower and Mus\u00e9e d'Orsay. Montmartre (18th) is charming and cheaper but hilly and a little removed. Wherever you choose, prioritize being a short walk from a M\u00e9tro stop.</p>
+<h2>What to eat</h2><p>Eat where the menu is short and seasonal. A proper morning is a croissant and coffee at a counter; lunch is the best-value hot meal of the day (look for the "formule"). Don't miss a neighborhood boulangerie, a fromagerie, and one long, unhurried dinner. Halal, kosher, vegetarian and vegan options are easy to find \u2014 BeforeDepart's food finders map them in any arrondissement.</p>
+<h2>Don't-miss experiences</h2><ul><li>Walk the Seine at golden hour, from Notre-Dame toward the Eiffel Tower.</li><li>Pick one big museum (the Louvre or the Mus\u00e9e d'Orsay) and arrive early.</li><li>Get lost on foot in Le Marais and Montmartre.</li><li>Visit Versailles first thing, before the tour buses arrive.</li></ul>
+<h2>Safety & money</h2><p>Paris is generally safe, but pickpocketing is the real risk \u2014 on the M\u00e9tro, around the Eiffel Tower, and on crowded escalators. Keep your phone and wallet zipped and in front of you, and ignore the street "petition" and "gold ring" scams. The currency is the euro; cards work almost everywhere, but carry a little cash for bakeries and markets. The EU-wide emergency number is 112.</p>`},
+
+{slug:"dubai",title:"Dubai: A First-Timer's Guide",city:"Dubai",country:"United Arab Emirates",emoji:"\uD83C\uDDE6\uD83C\uDDEA",kw:"dubai skyline burj khalifa desert",read:6,
+teaser:"The futuristic and the traditional, when to go to dodge the heat, getting around, etiquette, and the food worth seeking out.",
+body:`<h2>What Dubai actually is</h2><p>Dubai is a city of superlatives \u2014 the tallest tower, vast malls, man-made islands \u2014 but the trip people remember mixes the futuristic with the traditional: a morning in the creek-side souks and an evening watching the fountains under the Burj Khalifa. Plan for both sides and the city makes a lot more sense.</p>
+<h2>Best time to visit</h2><p>November to March is ideal: warm, sunny days perfect for the beach and outdoor dining. April and October are hot but manageable. From June to September it is extremely hot (often 40\u00b0C+), so summer trips become an indoor, early-morning and after-dark affair \u2014 though hotel prices drop sharply.</p>
+<h2>Getting around</h2><p>The Metro is clean, cheap and driverless, linking the airport, Downtown and Marina; buy a rechargeable Nol card. Taxis and ride-hailing apps are plentiful and affordable. Distances are big and it is too hot to walk far for much of the year, so build transport into every plan. A car is handy for day trips (the desert, or Abu Dhabi) but unnecessary in the city.</p>
+<h2>Where to base yourself</h2><p>Downtown puts you by the Burj Khalifa, Dubai Mall and the fountains. Dubai Marina and JBR are best for beach, waterfront dining and a buzzy atmosphere. Deira and Bur Dubai \u2014 the older districts around the Creek \u2014 are cheaper, more traditional, and great for souks and first-hand culture.</p>
+<h2>What to eat</h2><p>Dubai's food scene is global \u2014 Emirati, Lebanese, Indian, Persian and more. Have a shawarma and fresh juice from a local spot, try a traditional Emirati meal at least once, and don't overlook the excellent South Asian restaurants in the older neighborhoods. Almost everything is halal; vegetarian and vegan choices are easy thanks to the strong Indian influence. BeforeDepart's finders pinpoint them for you.</p>
+<h2>Don't-miss experiences</h2><ul><li>Sunset from the top of the Burj Khalifa, then the fountain show below.</li><li>A desert safari with dune driving and a Bedouin-style dinner.</li><li>An abra (small wooden boat) across Dubai Creek to the gold and spice souks.</li><li>A slow afternoon on the beach at JBR or Kite Beach.</li></ul>
+<h2>Etiquette, safety & money</h2><p>Dubai is one of the safest big cities in the world, with very low street crime. Dress is relaxed at beaches and hotels, but cover shoulders and knees in malls, souks and public areas, and be discreet with public affection. Alcohol is served in licensed venues such as hotels. The currency is the UAE dirham (AED) and cards are widely accepted. Emergency numbers are 999 (police) and 998 (ambulance).</p>`},
+
+{slug:"tokyo",title:"Tokyo: The Essential First Trip",city:"Tokyo",country:"Japan",emoji:"\uD83C\uDDEF\uD83C\uDDF5",kw:"tokyo skyline shibuya night",read:6,
+teaser:"How to handle a city this big: when to go, mastering the trains, where to stay, and the food and etiquette that matter.",
+body:`<h2>How to approach a city this big</h2><p>Tokyo is less a single city than a cluster of distinct neighborhoods, each with its own character. You will not "see it all" \u2014 and that's fine. Choose a handful of districts, go deep, and use the superb train network to hop between them. The magic is in the contrasts: a centuries-old shrine one street over from neon and skyscrapers.</p>
+<h2>Best time to visit</h2><p>Spring (late March\u2013April) brings cherry blossoms and mild weather, while autumn (October\u2013November) offers crisp days and beautiful foliage \u2014 both are peak for good reason. Summer is hot and humid with a rainy spell in June; winter is cold but clear and quiet. Book well ahead for blossom and autumn seasons.</p>
+<h2>Getting around</h2><p>Tokyo's trains and subways are punctual, spotless and reach everywhere \u2014 get a rechargeable Suica or Pasmo card (or add it to your phone) and tap in and out. Avoid rush hour (roughly 8\u20139am and 6\u20137pm) if you can. Stations are huge but well signed in English. Skip taxis for daily travel; they're excellent but pricey.</p>
+<h2>Where to base yourself</h2><p>Shinjuku and Shibuya are central, lively and well-connected \u2014 ideal for first-timers who want energy and easy transit. Tokyo Station / Marunouchi is calmer and convenient for day trips. Asakusa is more traditional and affordable, with old-town charm. Anywhere on the Yamanote loop line makes getting around simple.</p>
+<h2>What to eat</h2><p>Eat widely and cheaply: a bowl of ramen, sushi at a counter, crispy tonkatsu, and street snacks in Asakusa. Department-store basement food halls ("depachika") are a revelation. Many small shops use a ticket machine at the door \u2014 don't be shy. Halal, vegetarian and vegan food is growing but less common, so it helps to locate spots in advance; BeforeDepart's finders do that for any district.</p>
+<h2>Don't-miss experiences</h2><ul><li>The Shibuya Scramble crossing, then a quiet moment at nearby Meiji Shrine.</li><li>Old Tokyo at Senso-ji Temple in Asakusa, early morning.</li><li>A day trip to Nikko or Kamakura by train.</li><li>A skyline view at dusk from a tower or observation deck.</li></ul>
+<h2>Etiquette, safety & money</h2><p>Tokyo is extraordinarily safe and orderly. A little etiquette goes a long way: keep your voice down on trains, don't eat while walking, and carry your trash until you find a bin. Tipping is not expected. Japan is still partly cash-based, so carry some yen even though cards and IC cards are increasingly accepted. Emergency numbers are 110 (police) and 119 (ambulance/fire).</p>`},
+
+{slug:"rome",title:"Rome: Three Days in the Eternal City",city:"Rome",country:"Italy",emoji:"\uD83C\uDDEE\uD83C\uDDF9",kw:"rome colosseum skyline",read:6,
+teaser:"The icons without the burnout: best timing, walking the center, where to stay, and eating like a Roman.",
+body:`<h2>The mindset for Rome</h2><p>Rome layers three thousand years on top of itself, and the joy is stumbling onto it \u2014 a fountain around a corner, a ruin beside a caf\u00e9. Don't over-schedule. Three days is enough to see the icons and still leave time to sit in a piazza with a coffee and watch the city go by, which is half the point of being here.</p>
+<h2>Best time to visit</h2><p>April\u2013May and September\u2013October are ideal: warm, golden and lively without the brutal heat of high summer. July and August are hot and crowded, and many local businesses close in mid-August. Winter is mild, atmospheric and far quieter, with short queues at the big sights.</p>
+<h2>Getting around</h2><p>Rome's historic center is best on foot \u2014 most famous sights are within walking distance of each other, over uneven cobblestones, so bring proper shoes. The Metro has only a few lines but is handy for the Vatican and Colosseum; buses fill the gaps, and you must validate your ticket on board. Skip driving entirely: the center is restricted and stressful.</p>
+<h2>Where to base yourself</h2><p>The historic center (around the Pantheon and Piazza Navona) puts you in the middle of everything but costs more. Monti is trendy, walkable and near the Colosseum. Trastevere is charming and great for dining, just across the river. Prati is calmer and convenient for the Vatican.</p>
+<h2>What to eat</h2><p>Eat Roman: cacio e pepe, carbonara, suppl\u00ec (fried rice balls), and pizza al taglio by the slice. Take a standing espresso at the bar like a local, and choose gelato kept in covered tubs rather than towering neon swirls. Step a few streets off the main piazzas for better food at fairer prices. Vegetarian options abound; BeforeDepart's finders also map halal, kosher and vegan spots.</p>
+<h2>Don't-miss experiences</h2><ul><li>The Colosseum and Roman Forum \u2014 book a timed ticket and go early.</li><li>The Vatican Museums and St. Peter's Basilica (dress modestly: shoulders and knees covered).</li><li>An evening walk past the Trevi Fountain and the Pantheon, beautifully lit.</li><li>Aperitivo in Trastevere as the day cools.</li></ul>
+<h2>Safety & money</h2><p>Rome is safe but pickpockets work the crowds around Termini station, busy buses (the 64 is notorious) and the major sights \u2014 keep bags zipped and in front of you. The currency is the euro; cards are widely accepted, though small caf\u00e9s may prefer cash. The public "nasoni" fountains are safe to drink from, and the EU emergency number is 112.</p>`}
+];
+function beforeYouGo(city){
+  return '<div class="byg"><h2>\u2708\uFE0F Before you go to '+city+'</h2>'
+   +'<p>The practical stuff that saves money and stress:</p><div class="bb">'
+   +'<a class="pillbtn solid" target="_blank" rel="noopener sponsored" href="'+aff("https://www.skyscanner.com/","aviasales")+'">Find cheap flights</a>'
+   +'<a class="pillbtn" target="_blank" rel="noopener sponsored" href="'+aff("https://www.airalo.com/","airalo")+'">Get a travel eSIM</a>'
+   +'<a class="pillbtn" target="_blank" rel="noopener sponsored" href="'+aff("https://ektatraveling.com/","ekta")+'">Compare insurance</a>'
+   +'<a class="pillbtn" target="_blank" rel="noopener sponsored" href="'+aff("https://kiwitaxi.com/","kiwitaxi")+'">Airport transfer</a>'
+   +'</div>'
+   +'<p style="margin-top:14px">Want the live breakdown \u2014 safety advisory, visa & entry, money, emergency numbers and food finders for '+city+'? <button class="linklike" onclick="setTopTab(\'destinations\');try{window.scrollTo(0,0)}catch(e){}">Open the '+city+' essentials \u2192</button></p>'
+   +'</div>';
+}
+var _guidesDone=false;
+function renderGuides(){
+  if(_guidesDone) return;
+  var p=document.getElementById("panelGuides"); if(!p) return;
+  var s='<div class="gd-wrap"><div id="guidesList"><h2 class="gd-h">Travel guides</h2>'
+   +'<p class="gd-intro">Original, no-nonsense guides to the places people ask about most \u2014 what to know before you go.</p><div class="gd-grid">';
+  for(var i=0;i<GUIDES.length;i++){var g=GUIDES[i];
+    s+='<div class="gd-card" onclick="openGuide(\''+g.slug+'\')">'
+     +'<img class="ph" data-kw="'+g.kw+'" alt="'+g.city+'">'
+     +'<div class="b"><div class="ttl">'+g.emoji+' '+g.title+'</div>'
+     +'<div class="te">'+g.teaser+'</div>'
+     +'<div class="meta">'+g.read+' min read \u00b7 Read guide \u2192</div></div></div>';
+  }
+  s+='</div></div><div id="guidesArticle" style="display:none"></div></div>';
+  p.innerHTML=s; _guidesDone=true;
+  try{hydratePhotos();}catch(e){}
+}
+function openGuide(slug){
+  var g=null,i; for(i=0;i<GUIDES.length;i++){if(GUIDES[i].slug===slug)g=GUIDES[i];}
+  if(!g) return;
+  var a=document.getElementById("guidesArticle"), l=document.getElementById("guidesList");
+  a.innerHTML='<button class="gback" onclick="closeGuide()">\u2190 All guides</button>'
+   +'<article class="article"><img class="ph ahero" data-kw="'+g.kw+'" alt="'+g.city+'">'
+   +'<h1>'+g.emoji+' '+g.title+'</h1><div class="ameta">'+g.country+' \u00b7 '+g.read+' min read</div>'
+   +g.body+beforeYouGo(g.city)+'</article>';
+  l.style.display="none"; a.style.display="";
+  try{hydratePhotos();}catch(e){}
+  try{window.scrollTo(0,0);}catch(e){}
+}
+function closeGuide(){
+  var a=document.getElementById("guidesArticle"), l=document.getElementById("guidesList");
+  if(a)a.style.display="none"; if(l)l.style.display="";
+  try{window.scrollTo(0,0);}catch(e){}
+}
+function setTopTab(n){if(n==="guides"){try{renderGuides();}catch(e){}}var ids={destinations:"panelDestinations",camping:"panelCamping",cruises:"panelCruises",guides:"panelGuides"},k;for(k in ids){var el=document.getElementById(ids[k]);if(el)el.style.display=(k===n?"":"none");}var ts=document.querySelectorAll(".ttab"),i;for(i=0;i<ts.length;i++){ts[i].classList.toggle("on",ts[i].getAttribute("data-tab")===n);}try{if(n==="camping")renderCamps();}catch(e){var _c=document.getElementById("campSection");if(_c)_c.innerHTML='<div style="padding:24px;color:#b00020;font-weight:700;font-size:14px">Camping error: '+(e&&e.message)+'</div>';}try{if(n==="cruises")renderCruises();}catch(e){var _r=document.getElementById("panelCruises");if(_r)_r.innerHTML='<div style="padding:24px;color:#b00020;font-weight:700;font-size:14px">Cruises error: '+(e&&e.message)+'</div>';}try{window.scrollTo({top:0,behavior:"smooth"});}catch(e){}}
 function renderCruises(){var el=document.getElementById("panelCruises");if(!el)return;var band='<div class="affband" style="margin:6px 0 4px">'+'<a class="affcard" target="_blank" rel="noopener sponsored" href="'+aff("https://www.cruisedirect.com/","cruisedirect")+'"><b><span class="bdot" style="background:#0067B1"></span>Compare cruises</b><span>CruiseDirect</span></a>'+'<a class="affcard" target="_blank" rel="noopener sponsored" href="'+aff("https://www.expedia.com/Cruises","expediacruises")+'"><b><span class="bdot" style="background:#FFC72C"></span>Expedia Cruises</b><span>Deals & packages</span></a>'+'<a class="affcard" target="_blank" rel="noopener sponsored" href="'+aff("https://www.cruise.com/","cruisecom")+'"><b><span class="bdot" style="background:#1B75BC"></span>Cruise.com</b><span>Browse sailings</span></a>'+'</div>';var regs='<div class="cruisegrid">'+CRUISE_REGIONS.map(function(r,i){return '<button class="cruisecard" onclick="openCruise(\'region\','+i+')"><div class="cruiseimg"><img class="ph" data-kw="'+encodeURIComponent(r.kw)+'" data-emb="city" alt=""></div><div class="cruisemeta"><b>'+r.n+'</b><span>'+r.blurb+'</span><span class="cgo">See details \u2192</span></div></button>';}).join("")+'</div>';var lines='<div class="cruisegrid">'+CRUISE_LINES.map(function(l,i){return '<button class="cruisecard" onclick="openCruise(\'line\','+i+')"><div class="cruiseimg"><img class="ph" data-kw="'+encodeURIComponent(l.kw)+'" data-emb="city" alt=""></div><div class="cruisemeta"><b>'+l.n+'</b><span>'+l.blurb+'</span><span class="cgo">See details \u2192</span></div></button>';}).join("")+'</div>';el.innerHTML='<div class="sec-h"><h2>Cruises \u2014 sail the world</h2><p>Pick a region or a cruise line. We point you to trusted cruise sites to compare and book.</p></div>'+band+'<div class="sec" style="font-size:18px;margin-top:18px">By region</div>'+regs+'<div class="sec" style="font-size:18px;margin-top:22px">By cruise line</div>'+lines;hydratePhotos();}
 
 function bdInitTabs(){var cs=document.getElementById("campSection");try{renderCamps();}catch(e){if(cs)cs.innerHTML='<div style="padding:24px;color:#b00020;font-weight:700;font-size:14px">Camping error: '+(e&&e.message)+'</div>';}var pc=document.getElementById("panelCruises");try{renderCruises();}catch(e){if(pc)pc.innerHTML='<div style="padding:24px;color:#b00020;font-weight:700;font-size:14px">Cruises error: '+(e&&e.message)+'</div>';}}
