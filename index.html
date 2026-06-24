@@ -356,6 +356,7 @@ a{color:inherit;text-decoration:none}.hidden{display:none!important}
 .adv-btn .pillbtn{display:inline-block}
 .adv-dis{font-size:11px;color:var(--muted);margin:8px 0 0}
 
+.gd-cat{font-size:17px;color:var(--royal-d);margin:24px 2px 12px;padding-bottom:6px;border-bottom:1px solid var(--line);font-weight:800}
 .gd-wrap{padding:16px 14px 10px}
 .gd-h{font-size:22px;color:var(--ink);text-align:center;margin:6px 0 2px}
 .gd-intro{color:var(--muted);max-width:640px;margin:0 auto 18px;text-align:center;font-size:14px;line-height:1.55}
@@ -1027,16 +1028,35 @@ var _guidesDone=false;
 function renderGuides(){
   if(_guidesDone) return;
   var p=document.getElementById("panelGuides"); if(!p) return;
-  var s='<div class="gd-wrap"><div id="guidesList"><h2 class="gd-h">Travel guides</h2>'
-   +'<p class="gd-intro">Original, no-nonsense guides to the places people ask about most \u2014 what to know before you go.</p><div class="gd-grid">';
-  for(var i=0;i<GUIDES.length;i++){var g=GUIDES[i];
-    s+='<div class="gd-card" onclick="openGuide(\''+g.slug+'\')">'
-     +'<img class="ph" data-kw="'+g.kw+'" alt="'+g.city+'">'
+  var CATS=[
+    {name:"\uD83C\uDF0D Destinations", test:function(g){return !g.practical;}},
+    {name:"\uD83D\uDEC2 Visas & entry", slugs:["visa-us"]},
+    {name:"\uD83E\uDDF3 Packing", slugs:["pack-europe","carryon"]},
+    {name:"\u2708\uFE0F Flights & arrival", slugs:["longhaul","arrival"]},
+    {name:"\uD83D\uDEE1\uFE0F Insurance & money", slugs:["insurance-101","budget-hacks"]},
+    {name:"\uD83D\uDCF6 Staying connected", slugs:["esim-roaming"]},
+    {name:"\uD83D\uDC6A Family & first trips", slugs:["family-tips","first-timer"]}
+  ];
+  function card(g){
+    return '<div class="gd-card" onclick="openGuide(\''+g.slug+'\')">'
+     +'<img class="ph" data-kw="'+g.kw+'" alt="'+(g.city||g.title)+'">'
      +'<div class="b"><div class="ttl">'+g.emoji+' '+g.title+'</div>'
      +'<div class="te">'+g.teaser+'</div>'
      +'<div class="meta">'+g.read+' min read \u00b7 Read guide \u2192</div></div></div>';
   }
-  s+='</div></div><div id="guidesArticle" style="display:none"></div></div>';
+  var s='<div class="gd-wrap"><div id="guidesList"><h2 class="gd-h">Travel guides</h2>'
+   +'<p class="gd-intro">Original, no-nonsense guides \u2014 destinations plus practical travel know-how, so you know everything before you go.</p>';
+  for(var c=0;c<CATS.length;c++){
+    var cat=CATS[c], items=[], i;
+    for(i=0;i<GUIDES.length;i++){var g=GUIDES[i];
+      if(cat.test? cat.test(g) : (cat.slugs.indexOf(g.slug)>-1)) items.push(g);
+    }
+    if(!items.length) continue;
+    s+='<h3 class="gd-cat">'+cat.name+'</h3><div class="gd-grid">';
+    for(var j=0;j<items.length;j++) s+=card(items[j]);
+    s+='</div>';
+  }
+  s+='</div><div id="guidesArticle" style="display:none"></div></div>';
   p.innerHTML=s; _guidesDone=true;
   try{hydratePhotos();}catch(e){}
 }
